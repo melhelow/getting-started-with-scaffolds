@@ -1,58 +1,48 @@
+# app/controllers/movies_controller.rb
 class MoviesController < ApplicationController
   def index
-    matching_movies = Movie.all
-
-    @list_of_movies = matching_movies.order({ :created_at => :desc })
-
-    render({ :template => "movies/index" })
+    @movies = Movie.order(created_at: :desc)
   end
 
   def show
-    the_id = params.fetch("id")
+    @movie = Movie.find(params[:id])
+  end
 
-    matching_movies = Movie.where({ :id => the_id })
-
-    @the_movie = matching_movies.at(0)
-
-    render({ :template => "movies/show" })
+  def new
+    @movie = Movie.new
   end
 
   def create
-    the_movie = Movie.new
-    the_movie.title = params.fetch("query_title")
-    the_movie.description = params.fetch("query_description")
-    the_movie.released = params.fetch("query_released")
-
-    if the_movie.valid?
-      the_movie.save
-      redirect_to("/movies", { :notice => "Movie created successfully." })
+    @movie = Movie.new(movie_params)
+    if @movie.save
+      redirect_to @movie, notice: "Movie was successfully created."
     else
-      redirect_to("/movies", { :alert => the_movie.errors.full_messages.to_sentence })
+      render :new, status: :unprocessable_entity
     end
   end
 
+  def edit
+    @movie = Movie.find(params[:id])
+  end
+
   def update
-    the_id = params.fetch("path_id")
-    the_movie = Movie.where({ :id => the_id }).at(0)
-
-    the_movie.title = params.fetch("query_title")
-    the_movie.description = params.fetch("query_description")
-    the_movie.released = params.fetch("query_released")
-
-    if the_movie.valid?
-      the_movie.save
-      redirect_to("/movies/#{the_movie.id}", { :notice => "Movie updated successfully."} )
+    @movie = Movie.find(params[:id])
+    if @movie.update(movie_params)
+      redirect_to @movie, notice: "Movie was successfully updated."
     else
-      redirect_to("/movies/#{the_movie.id}", { :alert => the_movie.errors.full_messages.to_sentence })
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    the_id = params.fetch("path_id")
-    the_movie = Movie.where({ :id => the_id }).at(0)
+    @movie = Movie.find(params[:id])
+    @movie.destroy
+    redirect_to movies_path, notice: "Movie was successfully destroyed."
+  end
 
-    the_movie.destroy
+  private
 
-    redirect_to("/movies", { :notice => "Movie deleted successfully."} )
+  def movie_params
+    params.require(:movie).permit(:title, :description, :released)
   end
 end

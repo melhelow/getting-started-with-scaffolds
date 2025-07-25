@@ -1,122 +1,30 @@
-<div>
-  <div>
-    <h1>
-      List of all movies
-    </h1>
-  </div>
-</div>
+<!-- app/views/movies/index.html.erb -->
+<h1>Movies</h1>
 
-<hr>
+<%= link_to "New movie", new_movie_path %>
 
-<div>
-  <div>
-    <h2>
-      Add a new movie
-    </h2>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Released</th>
+      <th colspan="3">Actions</th>
+    </tr>
+  </thead>
 
-    <form action="/movies/ method="post">
-      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-
-      <input type="hidden" name="_method" value="patch">
-
-      <div>
-        <label for="title_box">
-          Title
-        </label>
-
-        <input type="text" id="title_box" name="query_title">
-      </div>
-
-      <div>
-        <label for="description_box">
-          Description
-        </label>
-
-        <input type="text" id="description_box" name="query_description">
-      </div>
-
-      <div>
-        <label for="released_box">
-          Released
-        </label>
-
-        <input type="text" id="released_box" name="query_released">
-      </div>
-
-      <button>
-        Create movie
-      </button>
-    </form>
-  </div>
-</div>
-
-<hr>
-<div>
-  <div>
-    <table border="1">
+  <tbody>
+    <% @movies.each do |movie| %>
       <tr>
-        <th>
-          ID
-        </th>
-
-        <th>
-          Title
-        </th>
-
-        <th>
-          Description
-        </th>
-
-        <th>
-          Released
-        </th>
-
-        <th>
-          Created at
-        </th>
-
-        <th>
-          Updated at
-        </th>
-
-        <th>
-        </th>
+        <td><%= movie.title %></td>
+        <td><%= movie.description %></td>
+        <td><%= movie.released ? "Yes" : "No" %></td>
+        <td><%= link_to "Show", movie_path(movie) %></td>
+        <td><%= link_to "Edit", edit_movie_path(movie) %></td>
+        <td>
+          <%= link_to "Delete", movie_path(movie), method: :delete, data: { confirm: "Are you sure?" } %>
+        </td>
       </tr>
-
-      <% @list_of_movies.each do |a_movie| %>
-        <tr>
-          <td>
-            <%= a_movie.id %>
-          </td>
-
-          <td>
-            <%= a_movie.title %>
-          </td>
-
-          <td>
-            <%= a_movie.description %>
-          </td>
-
-          <td>
-            <%= a_movie.released %>
-          </td>
-
-          <td>
-            <%= time_ago_in_words(a_movie.created_at) %> ago
-          </td>
-          <td>
-            <%= time_ago_in_words(a_movie.updated_at) %> ago
-          </td>
-
-          <td>
-            <a href="/movies/<%= a_movie.id %>">
-              Show details
-            </a>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-  </div>
-</div>
-
-<hr>
+    <% end %>
+  </tbody>
+</table>

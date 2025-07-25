@@ -1,101 +1,12 @@
-<div>
-  <div>
-    <h1>
-      Movie #<%= @the_movie.id %> details
-    </h1>
+<h1>
+  Movie #<%= @movie.id %> details
+</h1>
 
-    <div>
-      <div>
-        <a href="/movies">
-          Go back
-        </a>
-      </div>
+<p><strong>Title:</strong> <%= @movie.title %></p>
+<p><strong>Description:</strong> <%= @movie.description %></p>
+<p><strong>Released:</strong> <%= @movie.released ? "Yes" : "No" %></p>
 
-      <div>
-        <a href="/movies/<%= @the_movie.id %>" data-method="delete">
-          Delete movie
-        </a>
-      </div>
-    </div>
+<%= link_to "Edit", edit_movie_path(@movie) %> |
+<%= link_to "Back", movies_path %> |
+<%= link_to "Delete movie", movie_path(@movie), method: :delete, data: { confirm: "Are you sure?" } %>
 
-    <dl>
-      <dt>
-        Title
-      </dt>
-      <dd>
-        <%= @the_movie.title %>
-      </dd>
-
-      <dt>
-        Description
-      </dt>
-      <dd>
-        <%= @the_movie.description %>
-      </dd>
-
-      <dt>
-        Released
-      </dt>
-      <dd>
-        <%= @the_movie.released %>
-      </dd>
-
-      <dt>
-        Created at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_movie.created_at) %> ago
-      </dd>
-
-      <dt>
-        Updated at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_movie.updated_at) %> ago
-      </dd>
-    </dl>
-  </div>
-</div>
-
-<hr>
-
-
-<div>
-  <div>
-    <h2>
-      Edit movie
-    </h2>
-
-    <form action="/movies/<%= @the_movie.id %>" method="post">
-      <div>
-        <label for="title_box">
-          Title
-        </label>
-
-        <input type="text" id="title_box" name="query_title" value="<%= @the_movie.title %>">
-      </div>
-
-      <div>
-        <label for="description_box">
-          Description
-        </label>
-
-        <input type="text" id="description_box" name="query_description" value="<%= @the_movie.description %>">
-      </div>
-
-      <div>
-        <label for="released_box">
-          Released
-        </label>
-
-        <input type="text" id="released_box" name="query_released" value="<%= @the_movie.released %>">
-      </div>
-
-      <button>
-        Update movie
-      </button>
-    </form>
-  </div>
-</div>
-
-<hr>
